@@ -15,7 +15,7 @@ Things to Do:
 9. ROC- Thomas
 10. Accuracy, Recall, Precision, F1 Score- Barry
 11. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas
- -see https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
+ /n-see https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
 12. Paper explanation with Figures for: <br />
          a. data plot using first 2 MFCC of each song, each artist gets different color, and commentary on how well data separates <br />
          b. plot of eigenvalues from PCA in descending order, description of number of PC's needed to capture 75, 90, 98% of data, level of compression <br />
