@@ -1,7 +1,7 @@
 # Musician_Sound_Classifier_Project
 
 Things to Do:
-1. MFCC calculation and conversion (check Lecture 12 code)- Thomas
+1. MFCC calculation and conversion (check Lecture 12 code)- Thomas <br />
         Argument in function for user to specify number of coefficients
 3. DFT and PCA (check lecture for DFT code)- Barry
         make sure to include argument in function to allow user to specify amount of variance (i.e. 75%, 90%, 98%). 
