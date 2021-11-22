@@ -20,6 +20,10 @@ class AUC_ROC():
     def AUC_ROC(y_test, y_score):
         def plot_roc_curve(fpr, tpr, label=None): 
             plt.plot(fpr, tpr, c='green', linewidth=4, label=label) 
+            plt.fill_between(fpr, tpr, 0,  #AUC: area under the curve
+                 facecolor="orange", # The fill color
+                 color='green',       # The outline color
+                 alpha=0.2)          # Transparency of the fill
             plt.plot([0, 1], [0, 1], 'k--') 
             plt.axis([0, 1, 0, 1])
             plt.xlabel('False Positive Rate')
