@@ -50,6 +50,7 @@ class AudioFeatureExtractor():
             audio_data, Fs = lb.load(file,sr=44100) #check sampling rate of sound signals
             segments = self.splitSignal(audio_data, nsegments)
             target = self.getTargetLabel(file)
+            print(target)
 
             for j in range(nsegments):
                 #D = lb.stft(data)

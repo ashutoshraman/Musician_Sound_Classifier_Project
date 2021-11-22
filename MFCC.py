@@ -12,7 +12,7 @@ from AudioFeatureExtractor import AudioFeatureExtractor
 
 # %%
 nsegments = 100
-num_mfcc = int(input("Enter your value: "))
+num_mfcc = int(input("Enter your MFCC value: "))
 t_size = 0.5
 
 directory = "./project_2_data/"
