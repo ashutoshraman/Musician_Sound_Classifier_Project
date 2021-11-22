@@ -17,6 +17,9 @@ from sklearn.model_selection import GridSearchCV
 
 class AUC_ROC():
     
+    # y_score = knn.predict_proba(X_test)
+    # or y_score = cross_val_predict(knn, X_train,y_train,cv=10, method='predict_proba')
+    
     def AUC_ROC(y_test, y_score):
         def plot_roc_curve(fpr, tpr, label=None): 
             plt.plot(fpr, tpr, c='green', linewidth=4, label=label) 
