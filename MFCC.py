@@ -11,13 +11,6 @@ from sklearn.metrics import plot_confusion_matrix
 from AudioFeatureExtractor import AudioFeatureExtractor
 
 # %%
-#load an audio file
-""" 
-file = "C:/Users/XXP79/Documents/GitHub/Musician_Sound_Classifier_Project/project_2_data/drake/drake_1.wav"
-ipd.Audio(file) """
-
-
-# %%
 nsegments = 100
 num_mfcc = int(input("Enter your value: "))
 t_size = 0.5
