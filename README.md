@@ -10,10 +10,10 @@ Things to Do:
 4. KNN setup- Ashu done
 5. Logistic Regression Setup- Ashu done
 6. Grid Search functionality and nested CV functionality for each classifier model selection- Ashu done
-7. Confusion Matrix- Barry
+7. Confusion Matrix- Ashu done
 8. AUC- Thomas
 9. ROC- Thomas
-10. Accuracy, Recall, Precision, F1 Score- Barry
+10. Accuracy, Recall, Precision, F1 Score- Ashu done
 11. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas <br />
  -see https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
 12. Paper explanation with Figures for: <br />
