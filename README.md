@@ -6,14 +6,14 @@ Things to Do:
 3. DFT and PCA (check lecture for DFT code)- Barry <br />
         make sure to include argument in function to allow user to specify amount of variance (i.e. 75%, 90%, 98%). <br />
         Only use amplitude of DFT
-3. SVM setup -Ashu
-4. KNN setup- Ashu
-5. Logistic Regression Setup- Ashu
-6. Grid Search functionality and nested CV functionality for each classifier model selection- Ashu
-7. Confusion Matrix- Barry
+3. SVM setup -Ashu done
+4. KNN setup- Ashu done
+5. Logistic Regression Setup- Ashu done
+6. Grid Search functionality and nested CV functionality for each classifier model selection- Ashu done
+7. Confusion Matrix- Ashu done
 8. AUC- Thomas
 9. ROC- Thomas
-10. Accuracy, Recall, Precision, F1 Score- Barry
+10. Accuracy, Recall, Precision, F1 Score- Ashu done
 11. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas <br />
  -see https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
 12. Paper explanation with Figures for: <br />
