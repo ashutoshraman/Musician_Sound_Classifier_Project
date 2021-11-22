@@ -22,7 +22,7 @@ class deploy():
         # not sure if we need the following? - use knn/else to find auc
         knn = KNeighborsClassifier(n_neighbors=5)
         y_score = cross_val_predict(knn, X_test_real,Y_test_real,cv=10, method='predict_proba')
-        auc = roc_auc_score(y_test, y_score[:,1])
+        auc = roc_auc_score(Y_test_real, y_score[:,1])
         print(f'AUC of this model is {auc}')
 
         return(accuracy, auc)
