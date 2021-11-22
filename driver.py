@@ -11,7 +11,7 @@ import seaborn as sns
 # Feature extraction.  
 #Number of segments to split signal
 nsegments=1
-#number of cepstral coefficients
+#number of cepstral coefficients, shall we ask the user to input?
 num_mfcc=2
 # Number of samples to use for testing
 t_size = 0.5
