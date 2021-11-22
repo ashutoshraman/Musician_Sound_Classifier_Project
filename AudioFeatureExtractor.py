@@ -11,12 +11,16 @@ class AudioFeatureExtractor():
         self.audio_files = glob(data_dir+'/*.wav')
     
     def getTargetLabel(self, file):
-        if 'sharon' in file:
-            target = 'sharon'
-        elif 'pearl' in file:
-            target = 'pearl'
-        elif 'post' in file:
-            target = 'post'
+        if 'ed_sheeran' in file:
+            target = 'ed_sheeran'
+        elif 'drake' in file:
+            target = 'drake'
+        elif 'taylor_swift' in file:
+            target = 'taylor_swift'
+        elif 'linkin_park' in file:
+            target = 'linkin_park'
+        elif 'justin_bieber' in file:
+            target = 'justin_bieber'
         else:
             target ="does not exist"
             print("Target Not Found")
