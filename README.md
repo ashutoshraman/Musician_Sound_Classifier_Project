@@ -1,7 +1,7 @@
 # Musician_Sound_Classifier_Project
 
 Things to Do:
-1. MFCC calculation and conversion (check Lecture 12 code-AudioFeatureExtractor)- Thomas <br />
+1. MFCC calculation and conversion (check Lecture 12 code-AudioFeatureExtractor)- Thomas done <br />
         Argument in function for user to specify number of coefficients
 3. DFT and PCA (check lecture for DFT code)- Barry <br />
         make sure to include argument in function to allow user to specify amount of variance (i.e. 75%, 90%, 98%). <br />
@@ -11,10 +11,10 @@ Things to Do:
 5. Logistic Regression Setup- Ashu done
 6. Grid Search functionality and nested CV functionality for each classifier model selection- Ashu done
 7. Confusion Matrix- Ashu done
-8. AUC- Thomas
-9. ROC- Thomas
+8. AUC- Thomas done
+9. ROC- Thomas done
 10. Accuracy, Recall, Precision, F1 Score- Ashu done
-11. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas <br />
+11. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas done <br />
  -see https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
 12. Paper explanation with Figures for: <br />
          a. data plot using first 2 MFCC of each song, each artist gets different color, and commentary on how well data separates <br />

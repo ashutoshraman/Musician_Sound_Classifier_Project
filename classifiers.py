@@ -58,7 +58,7 @@ def ml_pipeline(pipeline_choice, X, Y):
                   refit=True,
                   cv=3, verbose=0)
 
-    scores = cross_val_score(grid_search_obj, X_train, Y_train, scoring='accuracy',cv=2, verbose=0)
+    scores = cross_val_score(grid_search_obj, X_train, Y_train, scoring='accuracy',cv=5, verbose=0)
     print("Mean Accuracy for pipeline: {:f}".format(np.mean(scores)))
     print("Stdev of Accuracy for pipeline: {:f}".format(np.std(scores)))
 
