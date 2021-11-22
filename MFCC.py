@@ -30,7 +30,7 @@ Y = audioFeatures["Target"]
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=t_size, random_state=1, stratify=Y)
 
 # %%
-#Build Classifier
+#Build Classifier or here recall the file classifiers.py
 knn = KNeighborsClassifier(n_neighbors=10, weights='distance',)
 knn.fit(X_train, Y_train)
 
