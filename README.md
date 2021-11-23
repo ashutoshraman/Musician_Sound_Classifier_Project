@@ -17,7 +17,7 @@ Things to Do:
 11. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas done <br />
  -see https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
 12. Paper explanation with Figures for: <br />
-         a. data plot using first 2 MFCC of each song, each artist gets different color, and commentary on how well data separates <br />
+         a. data plot using first 2 MFCC of each song, each artist gets different color, and commentary on how well data separates- Ashu done<br />
          b. plot of eigenvalues from PCA in descending order, description of number of PC's needed to capture 75, 90, 98% of data, level of compression <br />
          c. description of process for selecting best performing classifier (did you use gridsearch and CV) <br />
          d. plots for ROC, AUC, accuracy, confusion matrix for each top model on each set of data (so 6 sets of these 4 graphs), comment on results <br />
