@@ -13,10 +13,11 @@ Things to Do:
 7. Confusion Matrix- Ashu done
 8. AUC- Thomas done
 9. ROC- Thomas done
-10. Accuracy, Recall, Precision, F1 Score- Ashu done
-11. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas done <br />
+10. Learning curve - Thomas done
+11. Accuracy, Recall, Precision, F1 Score- Ashu done
+12. Deployment code to allow user to classify with a pretrained model on same file structure- Thomas done <br />
  -see https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
-12. Paper explanation with Figures for: <br />
+13. Paper explanation with Figures for: <br />
          a. data plot using first 2 MFCC of each song, each artist gets different color, and commentary on how well data separates- Ashu done<br />
          b. plot of eigenvalues from PCA in descending order, description of number of PC's needed to capture 75, 90, 98% of data, level of compression <br />
          c. description of process for selecting best performing classifier (did you use gridsearch and CV) <br />
