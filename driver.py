@@ -9,6 +9,8 @@ import seaborn as sns
 import pickle
 from AUC_ROC import AUC_ROC
 from sklearn.model_selection import learning_curve
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 
 # Feature extraction.  
@@ -16,11 +18,11 @@ from sklearn.model_selection import learning_curve
 nsegments=1
 #number of cepstral coefficients, shall we ask the user to input?
 num_mfcc=2
-# Number of samples to use for testing
-t_size = 0.5
+#class names
 classes = ['ed_sheeran', 'drake', 'taylor_swift', 'linkin_park', 'justin_bieber']
 
 if __name__ == '__main__':
+    # %% 
     directory = "./project_2_data/*"
     audioProcessor = AudioFeatureExtractor(directory)
     audioFeatures = audioProcessor.constructMFCCFeatures(nsegments, num_mfcc)
@@ -103,3 +105,12 @@ if __name__ == '__main__':
     filename = 'finalized_model.sav'
     pickle.dump(best_params, open(filename, 'wb'))
     #joblib.dump(model, filename)
+    # %%
+    directory = "./project_2_data/*"
+    audioProcessor = AudioFeatureExtractor(directory)
+    audioFeatures = AudioFeatureExtractor.performFFT(directory)
+    print(audioFeatures)
+    print(np.unique(audioFeatures["Target"]))
+
+    def get_eigen_graph(features_):
+
