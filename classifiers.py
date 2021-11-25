@@ -37,9 +37,31 @@ def logistic_pipeline():
                       'logisticregression__solver': ['newton-cg', 'lbfgs', 'sag', 'saga'],
                       'logisticregression__penalty': ['l2', 'none']}]
     return pipeline_obj, lr_param_grid
-    pass
 
-def ml_pipeline(pipeline_choice, X, Y):
+def pca_k_nearest_pipeline(variance):
+    pipeline_object = make_pipeline(StandardScaler(), PCA(n_components=variance), KNeighborsClassifier())
+    knn_param_grid = [{'kneighborsclassifier__n_neighbors': [5, 10, 15, 20],
+                       'kneighborsclassifier__weights': ['distance', 'uniform'],
+                       'kneighborsclassifier__p': [1, 2, 3], #1 is manhattan, 2 is euclidian, and arbitrary or 3 is minkowski dist
+                       }]
+    return pipeline_object, knn_param_grid
+
+def pca_svm_pipeline(variance):
+    pipeline_obj = make_pipeline(StandardScaler(), PCA(n_components=variance), SVC(random_state=10))
+    svm_param_grid = [{'svc__C': [.01, .1, 1, 10],
+                       'svc__kernel': ['linear', 'rbf', 'sigmoid', 'poly'],
+                       'svc__gamma': ['scale', 'auto', .01, .1, 1, 10],
+                       }]
+    return pipeline_obj, svm_param_grid
+
+def pca_logistic_pipeline(variance):
+    pipeline_obj = make_pipeline(StandardScaler(), PCA(n_components=variance), LogisticRegression(max_iter=1000, random_state=10))
+    lr_param_grid = [{'logisticregression__C': [.001, .01, .1, 1],
+                      'logisticregression__solver': ['newton-cg', 'lbfgs', 'sag', 'saga'],
+                      'logisticregression__penalty': ['l2', 'none']}]
+    return pipeline_obj, lr_param_grid
+
+def ml_pipeline(pipeline_choice, X, Y, variance=.75):
     X_train, X_test, Y_train, Y_test = train_test_split(
         X, Y, test_size=0.2, shuffle=True, random_state = 10, stratify=Y)
 
@@ -49,6 +71,12 @@ def ml_pipeline(pipeline_choice, X, Y):
         pipeline_obj, param_grid = svm_pipeline()
     elif pipeline_choice == 2:
         pipeline_obj, param_grid = logistic_pipeline()
+    elif pipeline_choice == 3:
+        pipeline_obj, param_grid = pca_k_nearest_pipeline(variance)
+    elif pipeline_choice == 4:
+        pipeline_obj, param_grid = pca_svm_pipeline(variance)
+    elif pipeline_choice == 5:
+        pipeline_obj, param_grid = pca_logistic_pipeline(variance)
     else:
         print('no classifier for this entry')
 
