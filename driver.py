@@ -7,9 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix, plot_confus
 import seaborn as sns
 import pickle
 from AUC_ROC import AUC_ROC
-from sklearn.model_selection import learning_curve
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+from addl_project_metrics import plot_mfcc, get_eigen_graph, learning_curve_graph
 
 
 # Feature extraction.  
@@ -29,13 +27,6 @@ if __name__ == '__main__':
         print(audioFeatures)
         print(np.unique(audioFeatures["Target"]))
 
-        def plot_mfcc(dataframe): #using all songs and no train test split yet
-            plt.figure()
-            sns.scatterplot(x=dataframe['MFCC 0'], y=dataframe['MFCC 1'], hue=dataframe['Target'], style=dataframe['Target'], legend='auto')
-            plt.title('First 2 MFCCs for Audio Clips of Artists')
-            plt.xlabel('MFCC 1')
-            plt.ylabel('MFCC 2')
-            plt.show()
         plot_mfcc(audioFeatures)
 
         best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(0, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
@@ -82,24 +73,7 @@ if __name__ == '__main__':
         plt.show()
 
 
-        def learning_curve_graph():
-            plt.figure(3)
-            train_sizes, train_scores, test_scores = learning_curve(best_params, X_train, Y_train,
-                                                    train_sizes=np.linspace(.1,1.0,10), cv=5, n_jobs=1)
-
-            train_mean = np.mean(train_scores,axis=1)
-            train_std = np.std(train_scores,axis=1)
-            test_mean = np.mean(test_scores,axis=1)
-            test_std = np.std(test_scores,axis=1)
-
-            plt.plot(train_sizes, train_mean, color='blue', marker='o', markersize=5, label='Training Accuracy')
-            plt.fill_between(train_sizes, train_mean+train_std,train_mean-train_std, alpha=0.15, color='blue')
-
-            plt.plot(train_sizes, test_mean, color='green', marker='s', markersize=5, label='Validation Accuracy')
-            plt.fill_between(train_sizes, test_mean+test_std,test_mean-test_std, alpha=0.15, color='green')
-
-            plt.show()
-        learning_curve_graph()
+        learning_curve_graph(best_params, X_train, Y_train)
 
         # save model for later deployment
         filename = 'finalized_model.sav'
@@ -115,26 +89,10 @@ if __name__ == '__main__':
         print(audioFeatures)
         print(np.unique(audioFeatures["Target"]))
 
-        def get_eigen_graph(dataframe, variance): #using all songs and no train test split yet
-            plt.figure(4)
-            scaler = StandardScaler()
-            pca = PCA(n_components=variance, svd_solver='full')
-
-            X_std = scaler.fit_transform(dataframe.iloc[:, 1:])
-            X_pca = pca.fit_transform(X_std)
-
-            print("Variance captured: {:f}".format(sum(pca.explained_variance_ratio_)))
-            print("Number of components kept: {:d}".format(pca.n_components_))
-            print(X_pca.shape)
-            plt.plot(pca.singular_values_)
-            plt.xlabel('Number of PCs')
-            plt.ylabel('Eigenvalue for Respective PC')
-            plt.title('Eigenvalues for Corresponding Number of Principal Components Needed to Explain Variance')
-            plt.show()
-            return
+        
         get_eigen_graph(audioFeatures, .9)
 
-        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(3, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
+        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(3, audioFeatures.iloc[:, 1:], audioFeatures['Target'], variance=.75)
         print(best_params.best_score_)
 
         # accuracy and evaluation of model
@@ -174,24 +132,7 @@ if __name__ == '__main__':
         plt.legend()
         plt.show()
 
-        def learning_curve_graph():
-            plt.figure(3)
-            train_sizes, train_scores, test_scores = learning_curve(best_params, X_train, Y_train,
-                                                    train_sizes=np.linspace(.1,1.0,10), cv=5, n_jobs=1)
-
-            train_mean = np.mean(train_scores,axis=1)
-            train_std = np.std(train_scores,axis=1)
-            test_mean = np.mean(test_scores,axis=1)
-            test_std = np.std(test_scores,axis=1)
-
-            plt.plot(train_sizes, train_mean, color='blue', marker='o', markersize=5, label='Training Accuracy')
-            plt.fill_between(train_sizes, train_mean+train_std,train_mean-train_std, alpha=0.15, color='blue')
-
-            plt.plot(train_sizes, test_mean, color='green', marker='s', markersize=5, label='Validation Accuracy')
-            plt.fill_between(train_sizes, test_mean+test_std,test_mean-test_std, alpha=0.15, color='green')
-
-            plt.show()
-        learning_curve_graph()
+        learning_curve_graph(best_params, X_train, Y_train)
 
         # save model for later deployment
         filename = 'finalized_model.sav'
