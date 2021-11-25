@@ -1,4 +1,3 @@
-# import MFCC
 from librosa.core import audio
 import numpy as np
 from AudioFeatureExtractor import AudioFeatureExtractor
@@ -17,100 +16,186 @@ from sklearn.preprocessing import StandardScaler
 #Number of segments to split signal
 nsegments=1
 #number of cepstral coefficients, shall we ask the user to input?
-num_mfcc=2
+num_mfcc=10
 #class names
 classes = ['ed_sheeran', 'drake', 'taylor_swift', 'linkin_park', 'justin_bieber']
 
 if __name__ == '__main__':
-    # %% 
-    directory = "./project_2_data/*"
-    audioProcessor = AudioFeatureExtractor(directory)
-    audioFeatures = audioProcessor.constructMFCCFeatures(nsegments, num_mfcc)
-    print(audioFeatures)
-    print(np.unique(audioFeatures["Target"]))
+    feat_ext = input('Enter the method to use for feature extraction (1-MFCC 2-DFT/PCA): ')
+    if int(feat_ext) == 1:
+        directory = "./project_2_data/*"
+        audioProcessor = AudioFeatureExtractor(directory)
+        audioFeatures = audioProcessor.constructMFCCFeatures(nsegments, num_mfcc)
+        print(audioFeatures)
+        print(np.unique(audioFeatures["Target"]))
 
-    def plot_mfcc(dataframe):
-        plt.figure()
-        sns.scatterplot(x=dataframe['MFCC 0'], y=dataframe['MFCC 1'], hue=dataframe['Target'], style=dataframe['Target'], legend='auto')
-        plt.title('First 2 MFCCs for Audio Clips of Artists')
-        plt.xlabel('MFCC 1')
-        plt.ylabel('MFCC 2')
+        def plot_mfcc(dataframe): #using all songs and no train test split yet
+            plt.figure()
+            sns.scatterplot(x=dataframe['MFCC 0'], y=dataframe['MFCC 1'], hue=dataframe['Target'], style=dataframe['Target'], legend='auto')
+            plt.title('First 2 MFCCs for Audio Clips of Artists')
+            plt.xlabel('MFCC 1')
+            plt.ylabel('MFCC 2')
+            plt.show()
+        plot_mfcc(audioFeatures)
+
+        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(0, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
+        print(best_params.best_score_)
+
+        # accuracy and evaluation of model
+        train_score = best_params.score(X_train, Y_train) #why is this not same as best_score_ above??
+        test_score = best_params.score(X_test, Y_test)
+        print(train_score, test_score)
+
+        Y_pred = best_params.predict(X_test)
+        cm = confusion_matrix(Y_test, Y_pred)
+        # print("Confusion Matrix: \n")
+        # print(cm)
+
+        titles_options = [("Confusion matrix, without normalization", None),
+                        ("Normalized confusion matrix", 'true')]
+        for title, normalize in titles_options:
+            disp = plot_confusion_matrix(best_params, X_test, Y_test,
+                                        cmap=plt.cm.Blues,
+                                        normalize=normalize)
+            disp.ax_.set_title(title)
+
+            # print(title)
+            # print(disp.confusion_matrix)
+
+            plt.show()
+
+        print(classification_report(Y_test, Y_pred))
+
+        plt.figure(2)
+        for i in classes:
+            new_Y_test = (Y_test == i)
+            new_Y_pred = (Y_pred == i)
+            auc = AUC_ROC(new_Y_test, new_Y_pred, i)
+            print('The AUC for {} is {}'.format(i, auc))
+            pass
+        plt.plot([0, 1], [0, 1], 'k--') 
+        plt.axis([0, 1, 0, 1])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('ROC Curve with One vs. All for Each Artist')
+        plt.legend()
         plt.show()
-    plot_mfcc(audioFeatures)
 
-    best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(0, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
-    print(best_params.best_score_)
 
-    # accuracy and evaluation of model
-    train_score = best_params.score(X_train, Y_train) #why is this not same as best_score_ above??
-    test_score = best_params.score(X_test, Y_test)
-    print(train_score, test_score)
+        def learning_curve_graph():
+            plt.figure(3)
+            train_sizes, train_scores, test_scores = learning_curve(best_params, X_train, Y_train,
+                                                    train_sizes=np.linspace(.1,1.0,10), cv=5, n_jobs=1)
 
-    Y_pred = best_params.predict(X_test)
-    cm = confusion_matrix(Y_test, Y_pred)
-    # print("Confusion Matrix: \n")
-    # print(cm)
+            train_mean = np.mean(train_scores,axis=1)
+            train_std = np.std(train_scores,axis=1)
+            test_mean = np.mean(test_scores,axis=1)
+            test_std = np.std(test_scores,axis=1)
 
-    titles_options = [("Confusion matrix, without normalization", None),
-                    ("Normalized confusion matrix", 'true')]
-    for title, normalize in titles_options:
-        disp = plot_confusion_matrix(best_params, X_test, Y_test,
-                                    cmap=plt.cm.Blues,
-                                    normalize=normalize)
-        disp.ax_.set_title(title)
+            plt.plot(train_sizes, train_mean, color='blue', marker='o', markersize=5, label='Training Accuracy')
+            plt.fill_between(train_sizes, train_mean+train_std,train_mean-train_std, alpha=0.15, color='blue')
 
-        # print(title)
-        # print(disp.confusion_matrix)
+            plt.plot(train_sizes, test_mean, color='green', marker='s', markersize=5, label='Validation Accuracy')
+            plt.fill_between(train_sizes, test_mean+test_std,test_mean-test_std, alpha=0.15, color='green')
 
+            plt.show()
+        learning_curve_graph()
+
+        # save model for later deployment
+        filename = 'finalized_model.sav'
+        pickle.dump(best_params, open(filename, 'wb'))
+        #joblib.dump(model, filename)
+
+
+
+    elif int(feat_ext) == 2:
+        directory = "./project_2_data/*"
+        audioProcessor = AudioFeatureExtractor(directory)
+        audioFeatures = audioProcessor.performFFT()
+        print(audioFeatures)
+        print(np.unique(audioFeatures["Target"]))
+
+        def get_eigen_graph(dataframe, variance): #using all songs and no train test split yet
+            plt.figure(4)
+            scaler = StandardScaler()
+            pca = PCA(n_components=variance, svd_solver='full')
+
+            X_std = scaler.fit_transform(dataframe.iloc[:, 1:])
+            X_pca = pca.fit_transform(X_std)
+
+            print("Variance captured: {:f}".format(sum(pca.explained_variance_ratio_)))
+            print("Number of components kept: {:d}".format(pca.n_components_))
+            print(X_pca.shape)
+            plt.plot(pca.singular_values_)
+            plt.xlabel('Number of PCs')
+            plt.ylabel('Eigenvalue for Respective PC')
+            plt.title('Eigenvalues for Corresponding Number of Principal Components Needed to Explain Variance')
+            plt.show()
+            return
+        get_eigen_graph(audioFeatures, .9)
+
+        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(3, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
+        print(best_params.best_score_)
+
+        # accuracy and evaluation of model
+        train_score = best_params.score(X_train, Y_train) #why is this not same as best_score_ above??
+        test_score = best_params.score(X_test, Y_test)
+        print(train_score, test_score)
+
+        Y_pred = best_params.predict(X_test)
+
+        titles_options = [("Confusion matrix, without normalization", None),
+                        ("Normalized confusion matrix", 'true')]
+        for title, normalize in titles_options:
+            disp = plot_confusion_matrix(best_params, X_test, Y_test,
+                                        cmap=plt.cm.Blues,
+                                        normalize=normalize)
+            disp.ax_.set_title(title)
+
+            # print(title)
+            # print(disp.confusion_matrix)
+
+            plt.show()
+
+        print(classification_report(Y_test, Y_pred))
+
+        plt.figure(2)
+        for i in classes:
+            new_Y_test = (Y_test == i)
+            new_Y_pred = (Y_pred == i)
+            auc = AUC_ROC(new_Y_test, new_Y_pred, i)
+            print('The AUC for {} is {}'.format(i, auc))
+            pass
+        plt.plot([0, 1], [0, 1], 'k--') 
+        plt.axis([0, 1, 0, 1])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('ROC Curve with One vs. All for Each Artist')
+        plt.legend()
         plt.show()
 
-    print(classification_report(Y_test, Y_pred))
+        def learning_curve_graph():
+            plt.figure(3)
+            train_sizes, train_scores, test_scores = learning_curve(best_params, X_train, Y_train,
+                                                    train_sizes=np.linspace(.1,1.0,10), cv=5, n_jobs=1)
 
-    plt.figure(2)
-    for i in classes:
-        new_Y_test = (Y_test == i)
-        new_Y_pred = (Y_pred == i)
-        auc = AUC_ROC(new_Y_test, new_Y_pred, i)
-        print('The AUC for {} is {}'.format(i, auc))
-        pass
-    plt.plot([0, 1], [0, 1], 'k--') 
-    plt.axis([0, 1, 0, 1])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('ROC Curve with One vs. All for Each Artist')
-    plt.legend()
-    plt.show()
+            train_mean = np.mean(train_scores,axis=1)
+            train_std = np.std(train_scores,axis=1)
+            test_mean = np.mean(test_scores,axis=1)
+            test_std = np.std(test_scores,axis=1)
 
+            plt.plot(train_sizes, train_mean, color='blue', marker='o', markersize=5, label='Training Accuracy')
+            plt.fill_between(train_sizes, train_mean+train_std,train_mean-train_std, alpha=0.15, color='blue')
 
-    def learning_curve_graph():
-        plt.figure(3)
-        train_sizes, train_scores, test_scores = learning_curve(best_params, X_train, Y_train,
-                                                train_sizes=np.linspace(.1,1.0,10), cv=5, n_jobs=1)
+            plt.plot(train_sizes, test_mean, color='green', marker='s', markersize=5, label='Validation Accuracy')
+            plt.fill_between(train_sizes, test_mean+test_std,test_mean-test_std, alpha=0.15, color='green')
 
-        train_mean = np.mean(train_scores,axis=1)
-        train_std = np.std(train_scores,axis=1)
-        test_mean = np.mean(test_scores,axis=1)
-        test_std = np.std(test_scores,axis=1)
+            plt.show()
+        learning_curve_graph()
 
-        plt.plot(train_sizes, train_mean, color='blue', marker='o', markersize=5, label='Training Accuracy')
-        plt.fill_between(train_sizes, train_mean+train_std,train_mean-train_std, alpha=0.15, color='blue')
-
-        plt.plot(train_sizes, test_mean, color='green', marker='s', markersize=5, label='Validation Accuracy')
-        plt.fill_between(train_sizes, test_mean+test_std,test_mean-test_std, alpha=0.15, color='green')
-
-        plt.show()
-    learning_curve_graph()
-
-    # save model for later deployment
-    filename = 'finalized_model.sav'
-    pickle.dump(best_params, open(filename, 'wb'))
-    #joblib.dump(model, filename)
-    # %%
-    directory = "./project_2_data/*"
-    audioProcessor = AudioFeatureExtractor(directory)
-    audioFeatures = AudioFeatureExtractor.performFFT(directory)
-    print(audioFeatures)
-    print(np.unique(audioFeatures["Target"]))
-
-    def get_eigen_graph(features_):
+        # save model for later deployment
+        filename = 'finalized_model.sav'
+        pickle.dump(best_params, open(filename, 'wb'))
+    else:
+        print('You can only choose 1 or 2')
 

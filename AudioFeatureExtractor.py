@@ -71,19 +71,22 @@ class AudioFeatureExtractor():
             #Find next power of 2 that is larger than the signal length
             #then perform FFT
             nfft = int(2**(np.ceil(np.log2(n))))
-            signal_fft = fft(audio_data,n=nfft,norm='ortho')
-            #Return one-sided FFT.
-            half_signal=int(np.ceil(nfft/2))
-            signal_fft=signal_fft[0:half_signal+1]
-            freqs = lb.fft_frequencies(sr,nfft)
-            #Report frequencies below cutoff
-            cutoff = np.where(freqs < freq_cutoff)
-            cut_freqs = freqs[cutoff]
-            cut_signal = np.abs(signal_fft[cutoff])
-            target = self.getTargetLabel(file)
+            if nfft == 524288: #bad to hard code but no other choice, many ed sheeran files are not to format and mess everything up
+                signal_fft = fft(audio_data,n=nfft,norm='ortho')
+                #Return one-sided FFT.
+                half_signal=int(np.ceil(nfft/2))
+                signal_fft=signal_fft[0:half_signal+1]
+                freqs = lb.fft_frequencies(sr,nfft)
+                #Report frequencies below cutoff
+                cutoff = np.where(freqs < freq_cutoff)
+                cut_freqs = freqs[cutoff]
+                cut_signal = np.abs(signal_fft[cutoff])
+                # print(cut_signal.shape)
+                target = self.getTargetLabel(file)
+                print(target)
 
-            data_entry = [target] + cut_signal.tolist()
-            data.append(data_entry)
+                data_entry = [target] + cut_signal.tolist()
+                data.append(data_entry)
 
         column_labels= ['Target']
         for q in range(len(cut_signal)):
