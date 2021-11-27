@@ -42,7 +42,7 @@ print("Training Accuracy:", knn.score(X_train, Y_train))
 print("Test Accuracy:", knn.score(X_test, Y_test))
 
 #Confusion matrix
-my_labels=['Sharon Van Etten', 'Pearl Jam', 'Post Malone']
+my_labels=['Ed Sheeran', 'Drake', 'Taylor Swift', 'Linkin Park', 'Justin Bieber']
 Y_pred = knn.predict(X_test)
 
 # Plot non-normalized confusion matrix
