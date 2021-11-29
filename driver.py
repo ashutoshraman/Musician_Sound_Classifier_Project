@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         plot_mfcc(audioFeatures)
 
-        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(0, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
+        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(2, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
         print(best_params.best_score_)
 
         # accuracy and evaluation of model
@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
         # save model for later deployment
         filename = 'finalized_model.sav'
-        pickle.dump(best_params, open(filename, 'wb'))
+        # pickle.dump(best_params, open(filename, 'wb'))
         #joblib.dump(model, filename)
 
 
@@ -90,9 +90,9 @@ if __name__ == '__main__':
         print(np.unique(audioFeatures["Target"]))
 
         
-        get_eigen_graph(audioFeatures, .9)
+        get_eigen_graph(audioFeatures, .98)
 
-        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(3, audioFeatures.iloc[:, 1:], audioFeatures['Target'], variance=.75)
+        best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(5, audioFeatures.iloc[:, 1:], audioFeatures['Target'], variance=.75)
         print(best_params.best_score_)
 
         # accuracy and evaluation of model
@@ -136,7 +136,7 @@ if __name__ == '__main__':
 
         # save model for later deployment
         filename = 'finalized_model.sav'
-        pickle.dump(best_params, open(filename, 'wb'))
+        # pickle.dump(best_params, open(filename, 'wb'))
     else:
         print('You can only choose 1 or 2')
 

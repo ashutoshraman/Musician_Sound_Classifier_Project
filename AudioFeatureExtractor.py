@@ -49,16 +49,20 @@ class AudioFeatureExtractor():
 
         for file in self.audio_files:
             audio_data, Fs = lb.load(file,sr=44100) #check sampling rate of sound signals
-            segments = self.splitSignal(audio_data, nsegments)
-            target = self.getTargetLabel(file)
-            print(target)
+            n = len(audio_data) # do this to make sure all songs are around 8 to 10s long
+            nfft = int(2**(np.ceil(np.log2(n))))
+            
+            if nfft == 524288: #delete anything that doesn't fit 8 to 10 sec long
+                segments = self.splitSignal(audio_data, nsegments)
+                target = self.getTargetLabel(file)
+                print(target)
 
-            for j in range(nsegments):
-                #D = lb.stft(data)
-                D= lb.feature.mfcc(segments[j],Fs, n_mfcc=num_mfcc)
-                s_db = np.mean(lb.amplitude_to_db(np.abs(D),ref = np.max),1)
-                data_entry = [target] + s_db.tolist()
-                data.append(data_entry)
+                for j in range(nsegments):
+                    #D = lb.stft(data)
+                    D= lb.feature.mfcc(segments[j],Fs, n_mfcc=num_mfcc)
+                    s_db = np.mean(lb.amplitude_to_db(np.abs(D),ref = np.max),1)
+                    data_entry = [target] + s_db.tolist()
+                    data.append(data_entry)
         self.mfcc_data_frame = pd.DataFrame(data, columns = column_labels)
         return self.mfcc_data_frame
 
@@ -71,6 +75,7 @@ class AudioFeatureExtractor():
             #Find next power of 2 that is larger than the signal length
             #then perform FFT
             nfft = int(2**(np.ceil(np.log2(n))))
+
             if nfft == 524288: #bad to hard code but no other choice, many ed sheeran files are not to format and mess everything up
                 signal_fft = fft(audio_data,n=nfft,norm='ortho')
                 #Return one-sided FFT.

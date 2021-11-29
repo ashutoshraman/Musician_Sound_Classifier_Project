@@ -35,7 +35,7 @@ def logistic_pipeline():
     pipeline_obj = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000, random_state=10))
     lr_param_grid = [{'logisticregression__C': [.001, .01, .1, 1],
                       'logisticregression__solver': ['newton-cg', 'lbfgs', 'sag', 'saga'],
-                      'logisticregression__penalty': ['l2', 'none']}]
+                      'logisticregression__penalty': ['l1', 'l2', 'none']}]
     return pipeline_obj, lr_param_grid
 
 def pca_k_nearest_pipeline(variance):
@@ -58,7 +58,7 @@ def pca_logistic_pipeline(variance):
     pipeline_obj = make_pipeline(StandardScaler(), PCA(n_components=variance), LogisticRegression(max_iter=1000, random_state=10))
     lr_param_grid = [{'logisticregression__C': [.001, .01, .1, 1],
                       'logisticregression__solver': ['newton-cg', 'lbfgs', 'sag', 'saga'],
-                      'logisticregression__penalty': ['l2', 'none']}]
+                      'logisticregression__penalty': ['l1', 'l2', 'none']}]
     return pipeline_obj, lr_param_grid
 
 def ml_pipeline(pipeline_choice, X, Y, variance=.75):
@@ -87,8 +87,9 @@ def ml_pipeline(pipeline_choice, X, Y, variance=.75):
                   cv=3, verbose=0)
 
     scores = cross_val_score(grid_search_obj, X_train, Y_train, scoring='accuracy',cv=5, verbose=0)
-    print("Mean Accuracy for pipeline: {:f}".format(np.mean(scores)))
-    print("Stdev of Accuracy for pipeline: {:f}".format(np.std(scores)))
+    
 
     best_params_model = grid_search_obj.fit(X_train, Y_train) #best params from model will give hyperparameters
+    print("Mean Accuracy for pipeline: {:f}".format(np.mean(scores)))
+    print("Stdev of Accuracy for pipeline: {:f}".format(np.std(scores)))
     return best_params_model, X_train, X_test, Y_train, Y_test

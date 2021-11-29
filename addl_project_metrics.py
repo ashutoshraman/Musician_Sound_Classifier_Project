@@ -27,7 +27,7 @@ def get_eigen_graph(dataframe, variance): #using all songs and no train test spl
     print("Number of components kept: {:d}".format(pca.n_components_))
     print(X_pca.shape)
     plt.plot(pca.singular_values_)
-    plt.xlabel('Number of PCs')
+    plt.xlabel('Number of Principal Components')
     plt.ylabel('Eigenvalue for Respective PC')
     plt.title('Eigenvalues for Corresponding Number of Principal Components Needed to Explain Variance')
     plt.show()
@@ -36,7 +36,7 @@ def get_eigen_graph(dataframe, variance): #using all songs and no train test spl
 def learning_curve_graph(fitted_pipeline, X_train, Y_train):
     plt.figure()
     train_sizes, train_scores, test_scores = learning_curve(fitted_pipeline, X_train, Y_train,
-                                            train_sizes=np.linspace(.1,1.0,10), cv=5, n_jobs=1)
+                                            train_sizes=np.linspace(.1,1.0,10), cv=4, n_jobs=1, shuffle=False)
 
     train_mean = np.mean(train_scores,axis=1)
     train_std = np.std(train_scores,axis=1)
@@ -48,5 +48,8 @@ def learning_curve_graph(fitted_pipeline, X_train, Y_train):
 
     plt.plot(train_sizes, test_mean, color='green', marker='s', markersize=5, label='Validation Accuracy')
     plt.fill_between(train_sizes, test_mean+test_std,test_mean-test_std, alpha=0.15, color='green')
-
+    plt.xlabel('Training Sample Size')
+    plt.ylabel('Accuracy of Model Training and Testing (%)')
+    plt.title('Learning Curve for Model and Specific Dataset')
+    plt.legend()
     plt.show()
