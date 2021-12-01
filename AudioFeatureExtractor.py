@@ -41,7 +41,7 @@ class AudioFeatureExtractor():
     
         return audioSegments
     
-    def constructMFCCFeatures(self, nsegments=10, num_mfcc=20):
+    def constructMFCCFeatures(self, nsegments=10, num_mfcc=20, validation=False):
         column_labels=["Target"]
         for q in range(num_mfcc):
             column_labels.append("MFCC "+str(q))
@@ -52,9 +52,12 @@ class AudioFeatureExtractor():
             n = len(audio_data) # do this to make sure all songs are around 8 to 10s long
             nfft = int(2**(np.ceil(np.log2(n))))
             
-            if nfft == 524288: #delete anything that doesn't fit 8 to 10 sec long
+            if nfft == 524288: #delete anything that doesn't fit 8 to 10 sec long or longer
                 segments = self.splitSignal(audio_data, nsegments)
-                target = self.getTargetLabel(file)
+                if validation == True:
+                    target = file
+                else:
+                    target = self.getTargetLabel(file)
                 print(target)
 
                 for j in range(nsegments):
