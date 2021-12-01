@@ -92,4 +92,5 @@ def ml_pipeline(pipeline_choice, X, Y, variance=.75):
     best_params_model = grid_search_obj.fit(X_train, Y_train) #best params from model will give hyperparameters
     print("Mean Accuracy for pipeline: {:f}".format(np.mean(scores)))
     print("Stdev of Accuracy for pipeline: {:f}".format(np.std(scores)))
+    print(best_params_model.best_params_)
     return best_params_model, X_train, X_test, Y_train, Y_test

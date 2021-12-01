@@ -27,8 +27,10 @@ if __name__ == '__main__':
         print(audioFeatures)
         print(np.unique(audioFeatures["Target"]))
 
+        #create MFCC plot
         plot_mfcc(audioFeatures)
 
+        #call ml pipeline function, with arg 1 being model to use
         best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(1, audioFeatures.iloc[:, 1:], audioFeatures['Target'])
         print(best_params.best_score_)
 
@@ -37,11 +39,13 @@ if __name__ == '__main__':
         test_score = best_params.score(X_test, Y_test)
         print(train_score, test_score)
 
+        #predict a label from test data
         Y_pred = best_params.predict(X_test)
         cm = confusion_matrix(Y_test, Y_pred)
         # print("Confusion Matrix: \n")
         # print(cm)
 
+        #confusion matrix
         titles_options = [("Confusion matrix, without normalization", None),
                         ("Normalized confusion matrix", 'true')]
         for title, normalize in titles_options:
@@ -57,6 +61,7 @@ if __name__ == '__main__':
 
         print(classification_report(Y_test, Y_pred))
 
+        #loop for multiple one vs all ROC curves in one plot
         plt.figure(2)
         for i in classes:
             new_Y_test = (Y_test == i)
@@ -72,7 +77,7 @@ if __name__ == '__main__':
         plt.legend()
         plt.show()
 
-
+        #call learning curve function producer
         learning_curve_graph(best_params, X_train, Y_train)
 
         # save model for later deployment
@@ -80,7 +85,7 @@ if __name__ == '__main__':
         pickle.dump(best_params, open(filename, 'wb'))
 
 
-
+    #in pseudo-UI, use this number to do dft-PCA pipelines
     elif int(feat_ext) == 2:
         directory = "./project_2_data/*"
         audioProcessor = AudioFeatureExtractor(directory)
@@ -89,6 +94,7 @@ if __name__ == '__main__':
         print(np.unique(audioFeatures["Target"]))
 
         
+        #call eigenvalue graph function
         get_eigen_graph(audioFeatures, .98)
 
         best_params, X_train, X_test, Y_train, Y_test = ml_pipeline(5, audioFeatures.iloc[:, 1:], audioFeatures['Target'], variance=.75)

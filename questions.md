@@ -18,3 +18,4 @@ Do we need to add AUC score? If yes, what method should we use to get y_score (k
 9. Does he want train accuracy reported too, or just test accuracy? 
 10. Precision, Recall, and F1 Score are mentioned but aren't mentioned in deliverables, so do we want them?
 11. When you test the model in class, will you provide labels, so we can create a confusion matrix with our predictions? Or do you just know the answer and expect us to output the predicted names? Also, what will the labels be (numbers, spaces in names, underscores)?
+12. Do you want code commented or explanation of how to use package?
