@@ -1,4 +1,5 @@
 .DS_Store
 project_2_data/
 __pycache__
+validation_data/*
 # finalized_model.sav
